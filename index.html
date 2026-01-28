@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Học Tập Tin Học 10 - Bài 20</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #be185d;
+            --secondary: #fb7185;
+            --bg-pastel: #fffafb;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg-pastel);
+            color: #334155;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid #fff;
+            box-shadow: 0 10px 30px rgba(219, 39, 119, 0.05);
+            border-radius: 2rem;
+        }
+
+        .pastel-input {
+            border: none;
+            border-bottom: 2px solid #f9a8d4;
+            background-color: transparent;
+            padding: 4px 10px;
+            color: var(--primary);
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .pastel-input:focus {
+            background-color: #fdf2f8;
+            border-bottom-color: var(--primary);
+        }
+
+        .btn-pastel {
+            background: linear-gradient(135deg, #f472b6 0%, #fb7185 100%);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-pastel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 114, 182, 0.3);
+        }
+
+        .flow-container {
+            background: #fffcfd;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid #fce7f3;
+            width: 100%;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        table input {
+            width: 100%;
+            border: 1px solid #fbcfe8 !important;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            box-sizing: border-box;
+        }
+
+        table input:disabled {
+            background-color: #fdf2f8;
+            border-color: #f9a8d4 !important;
+            color: #be185d;
+            cursor: not-allowed;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #f9a8d4; border-radius: 10px; }
+        
+        .step-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            line-height: 2;
+        }
+
+        .modal-animate {
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP -->
+    <div id="login-screen" class="screen active min-h-screen flex items-center justify-center p-4">
+        <div class="glass-card p-8 md:p-12 max-w-md w-full text-center">
+            <div class="mb-8 text-center">
+                <div class="w-20 h-20 bg-pink-100 rounded-3xl flex items-center justify-center mx-auto mb-4 rotate-3 shadow-inner">
+                    <span class="text-4xl">📚</span>
+                </div>
+                <h1 class="text-2xl font-black text-rose-700 uppercase tracking-tighter leading-tight">Phiếu Học Tập Tin Học 10</h1>
+                <p class="text-slate-500 font-bold text-xs mt-2">Bài 20: Câu lệnh lặp For</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="text-left">
+                    <label class="text-[10px] font-black text-rose-600 uppercase tracking-widest ml-1">Học sinh</label>
+                    <input type="text" id="login-name" placeholder="Họ và tên của em..." class="pastel-input w-full mt-1 border-b-2">
+                </div>
+                <div class="text-left">
+                    <label class="text-[10px] font-black text-rose-600 uppercase tracking-widest ml-1">Lớp</label>
+                    <input type="text" id="login-class" placeholder="Ví dụ: 10A1" class="pastel-input w-full mt-1 border-b-2">
+                </div>
+                <button onclick="app.handleLogin()" class="btn-pastel w-full text-sm py-4 shadow-xl mt-4 uppercase tracking-widest">Bắt đầu học tập ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH LÀM BÀI -->
+    <div id="lesson-screen" class="screen p-4 md:p-8">
+        <div class="max-w-4xl mx-auto glass-card overflow-hidden">
+            <header class="bg-gradient-to-r from-pink-400 to-rose-400 p-6 md:p-8 text-white relative">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold uppercase tracking-tight">Bài 20: Câu lệnh lặp For</h2>
+                        <p class="opacity-90 text-sm font-medium mt-1" id="user-info-display"></p>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur px-4 py-2 rounded-xl text-sm font-bold border border-white/30 flex items-center gap-2 w-max">
+                        ⏱️ <span id="timer">00:00</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="p-4 md:p-10 space-y-12">
+                <!-- HOẠT ĐỘNG 1 -->
+                <section class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <span class="flex-shrink-0 w-12 h-12 bg-rose-500 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg">1</span>
+                        <h3 class="text-xl font-bold text-slate-800 uppercase tracking-wide">Hình thành kiến thức: Phân tích Sơ đồ khối</h3>
+                    </div>
+
+                    <div class="flow-container shadow-sm">
+                        <div class="w-full flex justify-center mb-8">
+                            <img src="https://i.postimg.cc/DZWS9vyn/sdk.png" 
+                                 alt="Sơ đồ khối Hình 20.1" 
+                                 class="max-w-full h-auto rounded-2xl border-2 border-pink-100 shadow-md">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-pink-50/30 p-4 md:p-6 rounded-2xl border border-pink-100">
+                            <div class="space-y-3">
+                                <p class="text-sm font-bold text-slate-700">1. Khối hình thoi thực hiện chức năng gì?</p>
+                                <input type="text" id="q-rhombus" class="pastel-input w-full" placeholder="Trả lời...">
+                            </div>
+                            <div class="space-y-3">
+                                <p class="text-sm font-bold text-slate-700">2. Khi nào chương trình rẽ sang nhánh "Sai"?</p>
+                                <input type="text" id="q-false-branch" class="pastel-input w-full" placeholder="Trả lời...">
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 md:p-6 bg-white rounded-2xl border border-rose-100 space-y-4">
+                            <p class="text-sm font-bold text-rose-900 italic underline underline-offset-4 decoration-pink-300 mb-4">Hoàn thành cơ chế hoạt động:</p>
+                            <div class="text-sm space-y-4 text-slate-700">
+                                <div class="step-row">
+                                    <span>- Bước 1: Máy tính thực hiện khởi tạo giá trị</span>
+                                    <input type="text" id="step-1" class="pastel-input w-32 text-center" placeholder="...">
+                                    <span>cho biến chạy i.</span>
+                                </div>
+                                <div class="step-row">
+                                    <span>- Bước 2: Kiểm tra điều kiện</span>
+                                    <input type="text" id="step-2" class="pastel-input w-40 text-center" placeholder="...">
+                                    <span>. Nếu Đúng thì thực hiện khối lệnh.</span>
+                                </div>
+                                <div class="step-row">
+                                    <span>- Bước 3: Sau mỗi vòng lặp, biến i sẽ tự động được</span>
+                                    <input type="text" id="step-3" class="pastel-input w-40 text-center" placeholder="...">
+                                    <span>và quay lại kiểm tra điều kiện.</span>
+                                </div>
+                                <div class="step-row">
+                                    <span>- Bước 4: Vòng lặp kết thúc khi điều kiện kiểm tra cho kết quả là</span>
+                                    <input type="text" id="step-4" class="pastel-input w-24 text-center" placeholder="...">
+                                    <span>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HOẠT ĐỘNG 2 -->
+                <section class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <span class="flex-shrink-0 w-12 h-12 bg-rose-500 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg">2</span>
+                        <h3 class="text-xl font-bold text-slate-800 uppercase tracking-wide">Thực hành: Theo dõi bài toán tính tổng</h3>
+                    </div>
+
+                    <div class="bg-rose-50/50 p-5 rounded-2xl border border-rose-100 italic text-sm text-rose-900 leading-relaxed shadow-sm">
+                        <strong class="not-italic text-rose-600 uppercase text-[10px] tracking-widest block mb-1">Nhiệm vụ:</strong>
+                        Em hãy theo dõi giá trị của biến chạy <code class="bg-white px-1 rounded border">k</code> và tổng <code class="bg-white px-1 rounded border">S</code> khi máy tính thực hiện bài toán tính tổng 10 số tự nhiên đầu tiên (range(10)). Quan sát 2 hàng ví dụ đầu tiên trước khi thực hiện.
+                    </div>
+
+                    <div class="overflow-x-auto rounded-3xl border border-rose-100 shadow-sm overflow-hidden">
+                        <table class="min-w-[600px] text-center bg-white">
+                            <thead class="bg-pink-500 text-white text-[11px] font-black uppercase tracking-widest">
+                                <tr>
+                                    <th class="p-4 border-r border-pink-400 w-20">Lần lặp</th>
+                                    <th class="p-4 border-r border-pink-400 w-32">Biến K</th>
+                                    <th class="p-4 border-r border-pink-400">Công thức (S = S + K)</th>
+                                    <th class="p-4 w-32">Kết quả S</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loop-table-body" class="divide-y divide-rose-50"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="glass-card bg-rose-800 text-white p-6 md:p-8 mt-8 shadow-xl">
+                        <p class="text-[10px] font-black mb-6 uppercase text-pink-200 tracking-[0.2em] italic border-b border-rose-700/50 pb-2">Suy ngẫm & Kết luận:</p>
+                        <div class="space-y-8">
+                            <div>
+                                <p class="text-sm mb-3 font-medium">1. Giá trị tổng S cuối cùng sau 10 lần lặp là bao nhiêu?</p>
+                                <textarea id="conclusion-1" class="w-full bg-rose-900/30 rounded-xl p-4 border border-rose-600 outline-none h-20 text-sm focus:bg-rose-900/50 transition-all shadow-inner"></textarea>
+                            </div>
+                            <div>
+                                <p class="text-sm mb-3 font-medium">2. Tại sao giá trị k cuối cùng lại là 9 chứ không phải 10?</p>
+                                <textarea id="conclusion-2" class="w-full bg-rose-900/30 rounded-xl p-4 border border-rose-600 outline-none h-24 text-sm focus:bg-rose-900/50 transition-all shadow-inner"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="pt-8 text-center">
+                    <button onclick="app.submitWorksheet()" class="btn-pastel w-full py-5 text-xl shadow-xl uppercase tracking-widest font-black">Nộp bài làm 🚀</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH GIÁO VIÊN -->
+    <div id="teacher-screen" class="screen p-4 md:p-8 bg-slate-100 min-h-screen">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-800">Bảng Thống Kê Kết Quả</h1>
+                    <p class="text-slate-500 text-sm">Dashboard Quản Lý</p>
+                </div>
+                <button onclick="app.logout()" class="bg-white text-rose-600 border-2 border-rose-600 px-6 py-2 rounded-xl font-bold hover:bg-rose-50 transition-all">Đăng xuất</button>
+            </div>
+
+            <div class="glass-card overflow-hidden shadow-2xl border-none bg-white">
+                <div class="overflow-x-auto">
+                    <table class="min-w-[800px] text-left">
+                        <thead class="bg-slate-800 text-white text-sm">
+                            <tr>
+                                <th class="p-4">Học sinh</th>
+                                <th class="p-4">Lớp</th>
+                                <th class="p-4">Tiến độ</th>
+                                <th class="p-4">Thời gian</th>
+                                <th class="p-4 text-center">Chi tiết</th>
+                                <th class="p-4 text-right">Ngày nộp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-results-list" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+                <div id="no-data" class="p-20 text-center text-slate-400 hidden">Chưa có bài nộp nào.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIẾT -->
+    <div id="detail-modal" class="fixed inset-0 z-[9999] hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="app.closeDetail()"></div>
+        <div class="absolute inset-0 grid place-items-center p-4 pointer-events-none">
+            <div class="glass-card bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 md:p-10 shadow-2xl pointer-events-auto modal-animate">
+                <div class="flex justify-between items-center mb-6 border-b pb-4">
+                    <h2 class="text-xl font-bold text-slate-800">Chi tiết: <span id="detail-student-name" class="text-rose-600"></span></h2>
+                    <button onclick="app.closeDetail()" class="text-slate-400 hover:text-rose-500 text-3xl">&times;</button>
+                </div>
+                <div id="detail-content" class="space-y-8"></div>
+                <div class="mt-8 flex justify-end">
+                    <button onclick="app.closeDetail()" class="btn-pastel px-8">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHÚC MỪNG -->
+    <div id="success-modal" class="fixed inset-0 z-[9999] hidden">
+        <div class="absolute inset-0 bg-rose-900/40 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 grid place-items-center p-4">
+            <div class="glass-card p-10 max-w-sm w-full text-center shadow-2xl bg-white modal-animate">
+                <div class="text-6xl mb-6">🎈</div>
+                <h2 class="text-2xl font-bold text-rose-700 mb-2">Xong rồi!</h2>
+                <p class="text-slate-500 text-sm mb-8">Kết quả của em đã được gửi đi thành công.</p>
+                <button onclick="location.reload()" class="btn-pastel w-full">Về trang chủ</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const state = {
+            db: null, auth: null, user: null,
+            startTime: null, timerInterval: null,
+            userInfo: { name: '', class: '' },
+            submissions: []
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tin-hoc-10-v3-centered';
+        const firebaseConfig = JSON.parse(__firebase_config);
+
+        const app = {
+            async init() {
+                const firebaseApp = initializeApp(firebaseConfig);
+                state.auth = getAuth(firebaseApp);
+                state.db = getFirestore(firebaseApp);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(state.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(state.auth);
+                }
+
+                onAuthStateChanged(state.auth, (user) => { state.user = user; });
+                this.renderLoopTable();
+            },
+
+            renderLoopTable() {
+                const tbody = document.getElementById('loop-table-body');
+                let html = '';
+                for (let i = 1; i <= 10; i++) {
+                    const kVal = i - 1;
+                    if (i === 1) {
+                        // Ví dụ 1: k=0, S=0+0=0
+                        html += `<tr class="bg-rose-50/30">
+                            <td class="p-3 border-r font-bold text-rose-700 text-sm">${i} (Ví dụ)</td>
+                            <td class="p-2 border-r"><input type="text" value="0" disabled class="input-k" data-row="${i}"></td>
+                            <td class="p-2 border-r"><input type="text" value="S = 0 + 0" disabled class="input-formula" data-row="${i}"></td>
+                            <td class="p-2"><input type="text" value="0" disabled class="input-s font-bold" data-row="${i}"></td>
+                        </tr>`;
+                    } else if (i === 2) {
+                        // Ví dụ 2: k=1, S=0+1=1
+                        html += `<tr class="bg-rose-50/30">
+                            <td class="p-3 border-r font-bold text-rose-700 text-sm">${i} (Ví dụ)</td>
+                            <td class="p-2 border-r"><input type="text" value="1" disabled class="input-k" data-row="${i}"></td>
+                            <td class="p-2 border-r"><input type="text" value="S = 0 + 1" disabled class="input-formula" data-row="${i}"></td>
+                            <td class="p-2"><input type="text" value="1" disabled class="input-s font-bold" data-row="${i}"></td>
+                        </tr>`;
+                    } else {
+                        // Học sinh điền từ lần lặp 3 (k=2)
+                        html += `<tr class="hover:bg-rose-50/50 transition-colors">
+                            <td class="p-3 border-r bg-rose-50/10 font-bold text-rose-700 text-sm">${i}</td>
+                            <td class="p-2 border-r"><input type="text" class="input-k" data-row="${i}" placeholder="k = ?"></td>
+                            <td class="p-2 border-r"><input type="text" class="input-formula" data-row="${i}" placeholder="S = ? + ?"></td>
+                            <td class="p-2"><input type="text" class="input-s font-bold" data-row="${i}" placeholder="?"></td>
+                        </tr>`;
+                    }
+                }
+                tbody.innerHTML = html;
+            },
+
+            startTimer() {
+                state.startTime = new Date();
+                state.timerInterval = setInterval(() => {
+                    const diff = Math.floor((new Date() - state.startTime) / 1000);
+                    const m = Math.floor(diff / 60).toString().padStart(2, '0');
+                    const s = (diff % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').innerText = `${m}:${s}`;
+                }, 1000);
+            },
+
+            async handleLogin() {
+                const name = document.getElementById('login-name').value.trim();
+                const cls = document.getElementById('login-class').value.trim();
+                if (!name || !cls) return;
+
+                if (name.toUpperCase() === 'GV' && cls.toUpperCase() === 'GV') {
+                    document.getElementById('login-screen').classList.remove('active');
+                    document.getElementById('teacher-screen').classList.add('active');
+                    this.initTeacherView();
+                } else {
+                    state.userInfo = { name, class: cls };
+                    document.getElementById('user-info-display').innerText = `Học sinh: ${name} | Lớp: ${cls}`;
+                    this.startTimer();
+                    document.getElementById('login-screen').classList.remove('active');
+                    document.getElementById('lesson-screen').classList.add('active');
+                }
+            },
+
+            async submitWorksheet() {
+                if (!state.user) return;
+                clearInterval(state.timerInterval);
+                const data = {
+                    rhombus: document.getElementById('q-rhombus').value,
+                    falseBranch: document.getElementById('q-false-branch').value,
+                    steps: [document.getElementById('step-1').value, document.getElementById('step-2').value, document.getElementById('step-3').value, document.getElementById('step-4').value],
+                    table: [],
+                    conclusions: [document.getElementById('conclusion-1').value, document.getElementById('conclusion-2').value]
+                };
+                for(let i=1; i<=10; i++) {
+                    const inputK = document.querySelector(`.input-k[data-row="${i}"]`);
+                    const inputF = document.querySelector(`.input-formula[data-row="${i}"]`);
+                    const inputS = document.querySelector(`.input-s[data-row="${i}"]`);
+                    data.table.push({
+                        k: inputK ? inputK.value : '',
+                        f: inputF ? inputF.value : '',
+                        s: inputS ? inputS.value : ''
+                    });
+                }
+                const inputs = document.querySelectorAll('input:not(:disabled), textarea');
+                let filled = 0;
+                inputs.forEach(i => { if(i.value.trim()) filled++; });
+                const progress = Math.round((filled / inputs.length) * 100);
+
+                try {
+                    const colRef = collection(state.db, 'artifacts', appId, 'public', 'data', 'submissions');
+                    await addDoc(colRef, { ...state.userInfo, progress: progress + '%', duration: document.getElementById('timer').innerText, answers: data, timestamp: serverTimestamp() });
+                    document.getElementById('success-modal').classList.remove('hidden');
+                } catch (e) { alert("Lỗi!"); }
+            },
+
+            initTeacherView() {
+                const colRef = collection(state.db, 'artifacts', appId, 'public', 'data', 'submissions');
+                onSnapshot(query(colRef, orderBy('timestamp', 'desc')), (snap) => {
+                    const list = document.getElementById('teacher-results-list');
+                    list.innerHTML = '';
+                    state.submissions = [];
+                    if (snap.empty) return document.getElementById('no-data').classList.remove('hidden');
+                    document.getElementById('no-data').classList.add('hidden');
+                    snap.forEach(doc => {
+                        const d = doc.data();
+                        state.submissions.push({ id: doc.id, ...d });
+                        list.innerHTML += `
+                            <tr class="hover:bg-slate-50 border-b">
+                                <td class="p-4 font-bold text-slate-800">${d.name}</td>
+                                <td class="p-4">${d.class}</td>
+                                <td class="p-4"><span class="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-bold">${d.progress}</span></td>
+                                <td class="p-4 text-sm">${d.duration}</td>
+                                <td class="p-4 text-center">
+                                    <button onclick="app.showDetail('${doc.id}')" class="text-xs bg-rose-500 text-white px-3 py-1.5 rounded-lg font-bold">Xem</button>
+                                </td>
+                                <td class="p-4 text-right text-xs text-slate-400">${d.timestamp?.toDate().toLocaleString('vi-VN') || '...'}</td>
+                            </tr>`;
+                    });
+                });
+            },
+
+            showDetail(id) {
+                const doc = state.submissions.find(s => s.id === id);
+                if(!doc) return;
+                document.getElementById('detail-student-name').innerText = `${doc.name} (${doc.class})`;
+                const ans = doc.answers;
+                document.getElementById('detail-content').innerHTML = `
+                    <div class="space-y-6 text-sm">
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <h4 class="font-bold text-rose-700 mb-2">1. SƠ ĐỒ KHỐI</h4>
+                            <p><strong>Khối thoi:</strong> ${ans.rhombus || '...'}</p>
+                            <p><strong>Nhánh Sai:</strong> ${ans.falseBranch || '...'}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <h4 class="font-bold text-rose-700 mb-2">2. CƠ CHẾ</h4>
+                            <p>B1: ${ans.steps[0]} | B2: ${ans.steps[1]} | B3: ${ans.steps[2]} | B4: ${ans.steps[3]}</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl overflow-x-auto">
+                            <h4 class="font-bold text-rose-700 mb-2">3. BẢNG TÍNH</h4>
+                            <table class="w-full border text-center">
+                                <tr class="bg-slate-200"><th>Lần</th><th>k</th><th>F</th><th>S</th></tr>
+                                ${ans.table.map((r, i) => `<tr><td class="border">${i+1}</td><td class="border">${r.k}</td><td class="border">${r.f}</td><td class="border font-bold text-blue-600">${r.s}</td></tr>`).join('')}
+                            </table>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <h4 class="font-bold text-rose-700 mb-2">4. KẾT LUẬN</h4>
+                            <p><strong>S cuối:</strong> ${ans.conclusions[0]}</p>
+                            <p><strong>Tại sao k=9:</strong> ${ans.conclusions[1]}</p>
+                        </div>
+                    </div>`;
+                document.getElementById('detail-modal').classList.remove('hidden');
+            },
+            closeDetail() { document.getElementById('detail-modal').classList.add('hidden'); },
+            logout() { location.reload(); }
+        };
+
+        window.app = app;
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>
